@@ -1,0 +1,109 @@
+set ns [new Simulator]
+
+set nf [open ring.nam w]
+$ns namtrace-all $nf
+
+proc finish {} {
+global ns nff
+$ns flush-trace
+close $nff
+
+exec nam ring.nam &
+exit 0
+}
+
+set n0 [$ns node]
+set n1 [$ns node]
+set n2 [$ns node]
+set n3 [$ns node]
+set n4 [$ns node]
+
+$ns duplex-link $n0 $n1 10Mb 40ms DropTail
+$ns duplex-link $n1 $n2 10Mb 12ms DropTail
+$ns duplex-link $n2 $n3 10Mb 10ms DropTail
+$ns duplex-link $n3 $n4 10Mb 40ms DropTail
+$ns duplex-link $n4 $n0 10Mb 40ms DropTail
+
+$ns duplex-link-op $n0 $n1 orient right
+$ns duplex-link-op $n1 $n2 orient down
+$ns duplex-link-op $n2 $n3 orient down
+$ns duplex-link-op $n3 $n4 orient left
+$ns duplex-link-op $n4 $n0 orient up
+
+$ns color 2 red
+
+set tcp [new Agent/TCP]
+$tcp set class_ 2
+$ns attach-agent $n0 $tcp
+set sink [new Agent/TCPSink]
+$ns attach-agent $n1 $sink
+$ns connect $tcp $sink
+
+
+set ftp [new Application/FTP]
+$ftp attach-agent $tcp
+$ftp set type_ FTP
+$ftp set packet_size_ 1000
+$ftp set rate_ 1mb
+
+
+set udp [new Agent/UDP]
+$ns attach-agent $n1 $udp
+set null [new Agent/LossMonitor]
+$ns attach-agent $n5 $null
+$ns connect $udp $null
+$udp set fid_ 2
+
+set cbr [new Application/Traffic/CBR]
+$cbr attach-agent
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
